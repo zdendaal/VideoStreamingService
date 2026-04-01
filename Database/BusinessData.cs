@@ -33,8 +33,8 @@ namespace VideoStreamingService.Database
 
             // chat table configuratoin
             modelBuilder.Entity<Chat>().HasKey(x => x.Id);
-            modelBuilder.Entity<Chat>().HasMany(x => x.Messages).WithOne(x => x.Chat);
-            modelBuilder.Entity<Chat>().HasMany(x => x.Members).WithOne(x => x.Chat);
+            modelBuilder.Entity<Chat>().HasMany(x => x.Messages).WithOne(x => x.Chat).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Chat>().HasMany(x => x.Members).WithOne(x => x.Chat).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Chat>().Property(x => x.Name).IsRequired(true).HasMaxLength(BusinessSettings.s_maxChatNameLength);
             modelBuilder.Entity<Chat>().HasMany(x => x.Messages).WithOne(x => x.Chat).HasForeignKey(x => x.Chat).OnDelete(DeleteBehavior.Cascade);
 
@@ -42,6 +42,10 @@ namespace VideoStreamingService.Database
             modelBuilder.Entity<Message>().Property(x => x.Content).IsRequired(true).HasMaxLength(BusinessSettings.s_maxMessageContentLength);
             modelBuilder.Entity<Message>().Property(x => x.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
             modelBuilder.Entity<Message>().HasOne(x => x.Sender).WithMany().HasForeignKey(x => x.Sender).OnDelete(DeleteBehavior.Restrict);
+
+            // chat member table configuration
+            modelBuilder.Entity<ChatMember>().HasKey(x => new { x.UserId, x.ChatId });
+            modelBuilder.Entity<ChatMember>().Property(x => x.Role).IsRequired(true);
 
             base.OnModelCreating(modelBuilder);
         }

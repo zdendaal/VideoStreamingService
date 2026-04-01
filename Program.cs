@@ -9,6 +9,7 @@ using VideoStreamingService.Database;
 using MySql.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using VideoStreamingService.Services;
 
 
 
@@ -114,6 +115,8 @@ options.AddPolicy(allowedOrigins, policy => {
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
 
+builder.Services.AddScoped<Token>();
+
 
 
 // Building the application, follows request pipeline configuration
@@ -157,9 +160,11 @@ app.UseExceptionHandler(error =>
 });
 
 app.MapControllers()
-    .RequireCors(allowedOrigins);
+    .RequireCors(allowedOrigins)
+    .RequireAuthorization();
 
 app.MapHub<Chat>("/chat")
-    .RequireCors(allowedOrigins);
+    .RequireCors(allowedOrigins)
+    .RequireAuthorization();
 
 app.Run();

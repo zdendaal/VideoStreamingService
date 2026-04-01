@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VideoStreamingService.Models
 {
+    /// <summary>
+    /// User data model
+    /// </summary>
     public class User
     {
         [Key]

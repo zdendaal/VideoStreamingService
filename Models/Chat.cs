@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VideoStreamingService.Models
 {
+    /// <summary>
+    /// Chat data model
+    /// </summary>
     public class Chat
     {
         [Key]
